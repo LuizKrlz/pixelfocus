@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#228B22">
+    <meta name="msapplication-TileColor" content="#228B22">
     <title>PixelFocus - Forest Pixel Pomodoro Timer</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -43,6 +48,11 @@
                         <span class="toggle-slider"></span>
                     </div>
                 </div>
+            </div>
+            <div class="fullscreen-control">
+                <button class="btn btn-fullscreen" id="fullscreenBtn" title="Toggle Fullscreen">
+                    <span class="fullscreen-icon">⛶</span>
+                </button>
             </div>
         </div>
         
@@ -86,6 +96,24 @@
                     <button class="btn btn-start" id="startBtn">🚀 START</button>
                     <button class="btn btn-pause" id="pauseBtn" disabled>⏸️ PAUSE</button>
                     <button class="btn btn-reset" id="resetBtn">🔄 RESET</button>
+                </div>
+                
+                <!-- Mobile Floating Action Button -->
+                <div class="mobile-fab" id="mobileFab">
+                    <button class="fab-button fab-main" id="fabMain">
+                        <span class="fab-icon">⏱️</span>
+                    </button>
+                    <div class="fab-options">
+                        <button class="fab-button fab-option" id="fabStart" title="Start">
+                            <span class="fab-icon">🚀</span>
+                        </button>
+                        <button class="fab-button fab-option" id="fabPause" title="Pause" disabled>
+                            <span class="fab-icon">⏸️</span>
+                        </button>
+                        <button class="fab-button fab-option" id="fabReset" title="Reset">
+                            <span class="fab-icon">🔄</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="settings">

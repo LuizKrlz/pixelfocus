@@ -323,6 +323,18 @@ class PixelFocusTimer {
                 this.audioContext.resume();
             }
         }, { once: true });
+        
+        // Fullscreen functionality
+        this.initializeFullscreen();
+        
+        // Mobile FAB functionality
+        this.initializeMobileFab();
+        
+        // Keyboard shortcuts
+        this.initializeKeyboardShortcuts();
+        
+        // Screen orientation and resize handling
+        this.initializeResponsiveHandlers();
     }
     
     startTimer() {
@@ -350,6 +362,9 @@ class PixelFocusTimer {
                 this.completeSession();
             }
         }, 1000);
+        
+        // Update mobile FAB
+        this.updateMobileFab();
     }
     
     pauseTimer() {
@@ -365,6 +380,9 @@ class PixelFocusTimer {
         
         // Play pause sound
         this.sounds.pause();
+        
+        // Update mobile FAB
+        this.updateMobileFab();
     }
     
     resumeTimer() {
@@ -385,6 +403,9 @@ class PixelFocusTimer {
                 this.completeSession();
             }
         }, 1000);
+        
+        // Update mobile FAB
+        this.updateMobileFab();
     }
     
     resetTimer() {
@@ -404,6 +425,191 @@ class PixelFocusTimer {
         
         this.setTimeForCurrentSession();
         this.updateTimeDisplay();
+        
+        // Update mobile FAB
+        this.updateMobileFab();
+    }
+    
+    // Fullscreen functionality
+    initializeFullscreen() {
+        this.fullscreenBtn = document.getElementById('fullscreenBtn');
+        if (!this.fullscreenBtn) return;
+        
+        this.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
+        
+        // Listen for fullscreen changes
+        document.addEventListener('fullscreenchange', () => this.updateFullscreenIcon());
+        document.addEventListener('webkitfullscreenchange', () => this.updateFullscreenIcon());
+        document.addEventListener('mozfullscreenchange', () => this.updateFullscreenIcon());
+    }
+    
+    toggleFullscreen() {
+        if (!document.fullscreenElement && 
+            !document.webkitFullscreenElement && 
+            !document.mozFullScreenElement) {
+            // Enter fullscreen
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            }
+        } else {
+            // Exit fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            }
+        }
+    }
+    
+    updateFullscreenIcon() {
+        if (!this.fullscreenBtn) return;
+        
+        const isFullscreen = !!(document.fullscreenElement || 
+                               document.webkitFullscreenElement || 
+                               document.mozFullScreenElement);
+        
+        const icon = this.fullscreenBtn.querySelector('.fullscreen-icon');
+        if (icon) {
+            icon.textContent = isFullscreen ? '⛶' : '⛶';
+        }
+        
+        // Update button title
+        this.fullscreenBtn.title = isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen';
+    }
+    
+    // Mobile FAB functionality
+    initializeMobileFab() {
+        this.mobileFab = document.getElementById('mobileFab');
+        this.fabMain = document.getElementById('fabMain');
+        this.fabStart = document.getElementById('fabStart');
+        this.fabPause = document.getElementById('fabPause');
+        this.fabReset = document.getElementById('fabReset');
+        
+        if (!this.mobileFab || !this.fabMain) return;
+        
+        // Toggle FAB menu
+        this.fabMain.addEventListener('click', () => {
+            this.mobileFab.classList.toggle('active');
+        });
+        
+        // FAB button actions
+        if (this.fabStart) {
+            this.fabStart.addEventListener('click', () => {
+                this.startTimer();
+                this.mobileFab.classList.remove('active');
+            });
+        }
+        
+        if (this.fabPause) {
+            this.fabPause.addEventListener('click', () => {
+                this.pauseTimer();
+                this.mobileFab.classList.remove('active');
+            });
+        }
+        
+        if (this.fabReset) {
+            this.fabReset.addEventListener('click', () => {
+                this.resetTimer();
+                this.mobileFab.classList.remove('active');
+            });
+        }
+        
+        // Close FAB when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!this.mobileFab.contains(e.target)) {
+                this.mobileFab.classList.remove('active');
+            }
+        });
+    }
+    
+    // Keyboard shortcuts
+    initializeKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Only handle shortcuts when not typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+            
+            switch (e.key.toLowerCase()) {
+                case ' ':
+                case 'enter':
+                    e.preventDefault();
+                    if (this.isRunning) {
+                        this.pauseTimer();
+                    } else {
+                        this.startTimer();
+                    }
+                    break;
+                case 'r':
+                    e.preventDefault();
+                    this.resetTimer();
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    this.toggleFullscreen();
+                    break;
+                case 't':
+                    e.preventDefault();
+                    this.themeModeInput.checked = !this.themeModeInput.checked;
+                    this.themeModeInput.dispatchEvent(new Event('change'));
+                    break;
+                case 's':
+                    e.preventDefault();
+                    this.soundEnabledInput.checked = !this.soundEnabledInput.checked;
+                    this.soundEnabledInput.dispatchEvent(new Event('change'));
+                    break;
+                case 'n':
+                    e.preventDefault();
+                    this.notificationsEnabledInput.checked = !this.notificationsEnabledInput.checked;
+                    this.notificationsEnabledInput.dispatchEvent(new Event('change'));
+                    break;
+            }
+        });
+    }
+    
+    // Responsive handlers
+    initializeResponsiveHandlers() {
+        // Handle screen orientation changes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                this.updateDisplay();
+                this.showNotification('📱 Orientation changed!');
+            }, 100);
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            this.updateDisplay();
+        });
+        
+        // Handle visibility change (when app goes to background)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && this.isRunning) {
+                this.showNotification('📱 App is running in background');
+            }
+        });
+        
+        // Handle touch events for better mobile experience
+        let touchStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            const diff = touchStartY - touchEndY;
+            
+            // Swipe up gesture to show/hide FAB
+            if (diff > 50 && window.innerWidth <= 768) {
+                this.mobileFab.style.display = this.mobileFab.style.display === 'none' ? 'block' : 'none';
+            }
+        });
     }
     
     completeSession() {
@@ -514,6 +720,36 @@ class PixelFocusTimer {
         
         // Update user progress
         this.updateUserProgress();
+        
+        // Update mobile FAB buttons
+        this.updateMobileFab();
+    }
+    
+    updateMobileFab() {
+        if (!this.fabStart || !this.fabPause || !this.fabReset) return;
+        
+        // Update FAB button states
+        this.fabStart.disabled = this.isRunning && !this.isPaused;
+        this.fabPause.disabled = !this.isRunning || this.isPaused;
+        this.fabReset.disabled = false;
+        
+        // Update FAB button text/icons
+        if (this.isPaused) {
+            this.fabStart.querySelector('.fab-icon').textContent = '▶️';
+        } else {
+            this.fabStart.querySelector('.fab-icon').textContent = '🚀';
+        }
+        
+        // Update FAB main button icon based on timer state
+        if (this.fabMain) {
+            if (this.isRunning) {
+                this.fabMain.querySelector('.fab-icon').textContent = '⏱️';
+            } else if (this.isPaused) {
+                this.fabMain.querySelector('.fab-icon').textContent = '⏸️';
+            } else {
+                this.fabMain.querySelector('.fab-icon').textContent = '⏱️';
+            }
+        }
     }
     
     awardXP(amount) {
