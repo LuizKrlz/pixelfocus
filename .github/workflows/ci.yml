@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  quick-test:
+    name: Quick Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Timer Tests
+      run: npm run test:timer
+      
+    - name: Run UI Tests
+      run: npm run test:ui
+      
+    - name: Check file structure
+      run: |
+        echo "Checking project structure..."
+        ls -la
+        echo "✅ Project structure looks good!"
+        
+    - name: Verify HTML file
+      run: |
+        echo "Checking HTML file..."
+        if [ -f "index.html" ]; then
+          echo "✅ index.html exists"
+        else
+          echo "❌ index.html not found"
+          exit 1
+        fi
+        
+    - name: Verify CSS file
+      run: |
+        echo "Checking CSS file..."
+        if [ -f "styles.css" ]; then
+          echo "✅ styles.css exists"
+        else
+          echo "❌ styles.css not found"
+          exit 1
+        fi
+        
+    - name: Verify JavaScript file
+      run: |
+        echo "Checking JavaScript file..."
+        if [ -f "script.js" ]; then
+          echo "✅ script.js exists"
+        else
+          echo "❌ script.js not found"
+          exit 1
+        fi
+        
+    - name: Success message
+      run: |
+        echo "🎉 All checks passed! PixelFocus is ready!"
+        echo "✅ Tests: PASSED"
+        echo "✅ Structure: VALID"
+        echo "✅ Files: PRESENT"

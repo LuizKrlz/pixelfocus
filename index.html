@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelFocus - Forest Pixel Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+        <div class="tree tree1"></div>
+        <div class="tree tree2"></div>
+        <div class="leaf leaf1"></div>
+        <div class="leaf leaf2"></div>
+        <div class="leaf leaf3"></div>
+    </div>
+
+    <div class="container">
+        <div class="top-controls">
+            <div class="theme-toggle">
+                <label for="themeMode">🌙 Theme:</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="themeMode">
+                    <span class="toggle-slider"></span>
+                </div>
+            </div>
+            <div class="sound-controls">
+                <div class="control-group">
+                    <label for="soundEnabled">🔊 Sound:</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="soundEnabled" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="notificationsEnabled">🔔 Notifications:</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="notificationsEnabled" checked>
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <header class="header">
+            <h1 class="title">🌲 PIXELFOCUS 🌲</h1>
+            <div class="user-stats">
+                <div class="level-display">
+                    <span class="label">LEVEL:</span>
+                    <span id="userLevel">1</span>
+                </div>
+                <div class="xp-display">
+                    <span class="label">XP:</span>
+                    <span id="userXP">0</span>
+                    <span>/</span>
+                    <span id="nextLevelXP">100</span>
+                </div>
+                <div class="xp-bar">
+                    <div class="xp-progress" id="xpProgress"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="timer-section">
+                <div class="character-sprite" id="characterSprite">
+                    🧙‍♂️
+                </div>
+                
+                <div class="timer-display">
+                    <div class="session-type" id="sessionType">WORK SESSION</div>
+                    <div class="time-display" id="timeDisplay">25:00</div>
+                    <div class="session-counter">
+                        <span>Session:</span>
+                        <span id="sessionCount">1</span>
+                        <span>/</span>
+                        <span>4</span>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-start" id="startBtn">🚀 START</button>
+                    <button class="btn btn-pause" id="pauseBtn" disabled>⏸️ PAUSE</button>
+                    <button class="btn btn-reset" id="resetBtn">🔄 RESET</button>
+                </div>
+
+                <div class="settings">
+                    <div class="setting-group">
+                        <label for="workTime">Work Time (min):</label>
+                        <input type="number" id="workTime" min="1" max="60" value="25">
+                    </div>
+                    <div class="setting-group">
+                        <label for="shortBreak">Short Break (min):</label>
+                        <input type="number" id="shortBreak" min="1" max="30" value="5">
+                    </div>
+                    <div class="setting-group">
+                        <label for="longBreak">Long Break (min):</label>
+                        <input type="number" id="longBreak" min="1" max="60" value="15">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="achievements">
+                <h3>🏆 ACHIEVEMENTS</h3>
+                <div class="achievement-list" id="achievementList">
+                    <div class="achievement locked" data-achievement="first-session">
+                        <span class="achievement-icon">🌱</span>
+                        <span class="achievement-name">First Session Complete</span>
+                    </div>
+                    <div class="achievement locked" data-achievement="level-up">
+                        <span class="achievement-icon">🌿</span>
+                        <span class="achievement-name">Level Up!</span>
+                    </div>
+                    <div class="achievement locked" data-achievement="pomodoro-master">
+                        <span class="achievement-icon">🌳</span>
+                        <span class="achievement-name">Forest Master</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>🌲 Stay focused and grow your forest! 🌲</p>
+        </footer>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
