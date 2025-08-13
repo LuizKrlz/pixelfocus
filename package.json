@@ -10,7 +10,8 @@
     "start": "open index.html",
     "dev": "python3 -m http.server 8000",
     "lint": "echo 'No linter configured yet'",
-    "build": "echo 'No build process needed - static files'"
+    "build": "echo 'No build process needed - static files'",
+    "favicon": "node generate-favicons.js"
   },
   "keywords": [
     "pomodoro",
