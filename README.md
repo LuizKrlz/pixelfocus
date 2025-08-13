@@ -1,5 +1,7 @@
 # 🌲 PixelFocus 🌲
 
+[![CI](https://github.com/LuizKrlz/pixelfocus/actions/workflows/ci.yml/badge.svg)](https://github.com/LuizKrlz/pixelfocus/actions/workflows/ci.yml)
+
 A gamified Pomodoro timer with a mystical forest pixel theme that makes productivity fun and engaging!
 
 ## 🎮 Features
